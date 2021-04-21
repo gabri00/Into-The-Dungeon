@@ -1,2 +1,2 @@
-# Java_fightGame
+# Java fight game
  Fight command line game.
