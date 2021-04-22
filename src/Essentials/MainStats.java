@@ -1,5 +1,9 @@
 package Essentials;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class MainStats {
     private double hp, atk, def, crit;
 
@@ -40,6 +44,18 @@ public class MainStats {
 
     public void setCrit(double crit) {
         this.crit = crit;
+    }
+
+    public void loadTexture(String textureFile) throws FileNotFoundException {
+        File texture = new File(textureFile);
+        Scanner reader = new Scanner(texture);
+
+        if (texture.canRead()) {
+            while (reader.hasNextLine())
+                System.out.println(reader.nextLine());
+
+            reader.close();
+        }
     }
 
 }
