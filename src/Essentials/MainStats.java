@@ -1,7 +1,9 @@
-public class Character {
+package Essentials;
+
+public class MainStats {
     private double hp, atk, def, crit;
 
-    public Character(double hp, double atk, double def, double crit) {
+    public MainStats(double hp, double atk, double def, double crit) {
         this.hp = hp;
         this.atk = atk;
         this.def = def;
