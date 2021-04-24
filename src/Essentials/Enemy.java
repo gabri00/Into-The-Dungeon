@@ -1,13 +1,11 @@
-package Enemies;
+package Essentials;
 
-import Essentials.MainStats;
-import Essentials.Hero;
 import org.jetbrains.annotations.NotNull;
 
 public class Enemy extends MainStats {
 
-    public Enemy(double hp, double atk, double def, double crit) {
-        super(hp, atk, def, crit);
+    public Enemy(String tag, double hp, double atk, double def, double crit) {
+        super(tag, hp, atk, def, crit);
     }
 
     public void hit(@NotNull Hero he) {

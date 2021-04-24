@@ -1,6 +1,6 @@
-import Enemies.Enemy;
+import Essentials.Enemy;
 import Essentials.Hero;
-import Weapons.Weapon;
+import Essentials.Weapon;
 
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -8,14 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-    private static final int STATS = 4;
+//    private static final int STATS = 4;
 
-    private Map<String, Enemy> generateEnemies() {
-        Map<String, Enemy> enemies = new HashMap<String, Enemy>();
+    private Map<Integer, Enemy> generateEnemies() {
+        Map<Integer, Enemy> enemies = new HashMap<>();
 
-        enemies.put("slime", new Enemy(20.0, 10.0, 40.0, 0.0));
-        enemies.put("demon", new Enemy(250.0, 60.0, 40.0, 20.0));
-        enemies.put("dragon", new Enemy(2000.0, 90.0, 50.0, 10.0));
+        enemies.put(0, new Enemy("slime", 20.0, 10.0, 40.0, 0.0));      // 0 : slime
+        enemies.put(1, new Enemy("demon", 250.0, 60.0, 40.0, 20.0));    // 1 : demon
+        enemies.put(2, new Enemy("dragon", 2000.0, 90.0, 50.0, 10.0));  // 2 : dragon
 
         return enemies;
     }
@@ -27,23 +27,16 @@ public class Main {
                 """);
     }
 
-     private void generateDungeon(Map<String, Enemy> enemies) {
-        final int nFloors = 3;
-
+     private void generateDungeon(Map<Integer, Enemy> enemies) {
         Random rand = new Random();
-        final int nChambers = rand.nextInt(5) + 1;
 
+        final int nFloors = 3;
+        final int nChambers = rand.nextInt(3) + 1;
         Enemy[][] dungeon = new Enemy[nChambers][nFloors];
 
-        Map<Integer, String> idxEnemy= new HashMap();
-        idxEnemy.put(0, "slime");
-        idxEnemy.put(1, "demon");
-        idxEnemy.put(2, "dragon");
-
         for (int i = 0; i < nChambers; i++) {
-            for (int j = 0; j < nFloors; j++) {
-                dungeon[i][j] = enemies.get(idxEnemy.get(rand.nextInt(3)));
-            }
+            for (int j = 0; j < nFloors; j++)
+                dungeon[i][j] = enemies.get(rand.nextInt(3));
         }
 
         for (int i = 0; i < nChambers; i++) {

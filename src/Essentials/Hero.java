@@ -1,7 +1,5 @@
 package Essentials;
 
-import Enemies.Enemy;
-import Weapons.Weapon;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -9,8 +7,8 @@ public class Hero extends MainStats {
 
     public String equippedWeapon = "";
 
-    public Hero(double hp, double atk, double def, double crit) {
-        super(hp, atk, def, crit);
+    public Hero(String tag, double hp, double atk, double def, double crit) {
+        super(tag, hp, atk, def, crit);
     }
 
     public void hit(@NotNull Enemy en) {

@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class MainStats {
+    private String tag;
     private double hp, atk, def, crit;
 
-    public MainStats(double hp, double atk, double def, double crit) {
+    public MainStats(String tag, double hp, double atk, double def, double crit) {
+        this.tag = tag;
         this.hp = hp;
         this.atk = atk;
         this.def = def;
@@ -30,6 +32,10 @@ public class MainStats {
         return crit;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
     public void setHp(double hp) {
         this.hp = hp;
     }
@@ -44,6 +50,10 @@ public class MainStats {
 
     public void setCrit(double crit) {
         this.crit = crit;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public void loadTexture(String textureFile) throws FileNotFoundException {
