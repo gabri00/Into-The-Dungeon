@@ -22,7 +22,7 @@ public class Hero extends MainStats {
 
     public void equipWeapon(Weapon w) {
         equippedWeapon = w;
-        
+
         if (w.getAtk() != 0.0)    this.setAtk(this.getAtk() + w.getAtk());
         if (w.getCrit() != 0.0)   this.setCrit(this.getCrit() + w.getCrit());
         if (w.getHp() != 0.0)     this.setHp(this.getHp() + w.getHp());
