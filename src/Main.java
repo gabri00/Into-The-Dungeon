@@ -8,9 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
 
-//    private static final int STATS = 4;
-
-    private Map<Integer, Enemy> generateEnemies() {
+    private Map<Integer, Enemy> mapEnemies() {
         Map<Integer, Enemy> enemies = new HashMap<>();
 
         enemies.put(0, new Enemy("slime", 20.0, 10.0, 40.0, 0.0));      // 0 : slime
@@ -25,13 +23,15 @@ public class Main {
                 Welcome to the dungeon hero!
                 Let's begin your adventure...
                 """);
+
+        System.out.print("Increase the console size for a better gaming experience!");
     }
 
      private void generateDungeon(Map<Integer, Enemy> enemies) {
         Random rand = new Random();
 
         final int nFloors = 3;
-        final int nChambers = rand.nextInt(3) + 1;
+        final int nChambers = 2;
         Enemy[][] dungeon = new Enemy[nChambers][nFloors];
 
         for (int i = 0; i < nChambers; i++) {
@@ -42,14 +42,12 @@ public class Main {
         for (int i = 0; i < nChambers; i++) {
             for (int j = 0; j < nFloors; j++) {
                 var temp = dungeon[i][j];
-                System.out.println("Chamber " + (i+1) + ", floor " + (j+1) + ", stats: " + temp.getHp() + " " + temp.getAtk() + " " + temp.getDef() + " " + temp.getCrit());
+                System.out.println("Chamber " + (i+1) + ", floor " + (j+1) + ", Enemy: " + temp.getTag() + ", stats: " + temp.getHp() + " " + temp.getAtk() + " " + temp.getDef() + " " + temp.getCrit());
             }
         }
     }
 
      private void beginExploration() throws InterruptedException, FileNotFoundException {
-        Hero he = new Hero(150, 10, 10, 10);
-
         System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWeapon: ");
         Scanner in = new Scanner(System.in);
         String weaponChoice = in.nextLine();
@@ -57,30 +55,30 @@ public class Main {
 
         switch (weaponChoice) {
             case "sword" -> {
-                Weapon sword = new Weapon(0.0, 22.5, 0.0, 5.0);
+                Hero he = new Hero("warrior", 500, 50, 60, 10);
+                Weapon sword = new Weapon("sword", 0.0, 22.5, 0.0, 5.0);
                 he.equipWeapon(sword);
                 he.loadTexture("assets/heroes/swordHero.txt");
-                he.equippedWeapon = "sword";
             }
             case "spear" -> {
-                Weapon spear = new Weapon(10.0, 30.0, 0.0, 1.0);
+                Hero he = new Hero("lancer", 500.0, 50.0, 60.0, 10.0);
+                Weapon spear = new Weapon("spear", 10.0, 30.0, 0.0, 1.0);
                 he.equipWeapon(spear);
                 he.loadTexture("assets/heroes/spearHero.txt");
-                he.equippedWeapon = "spear";
             }
             case "bow" -> {
-                Weapon bow = new Weapon(20.0, 30.0, 0.0, 25.0);
+                Hero he = new Hero("archer", 300.0, 100.0, 20.0, 37.0);
+                Weapon bow = new Weapon("bow", 20.0, 30.0, 0.0, 25.0);
                 he.equipWeapon(bow);
                 he.loadTexture("assets/heroes/archerHero.txt");
-                he.equippedWeapon = "bow";
             }
             default -> throw new IllegalStateException("Unexpected value: " + weaponChoice);
         }
 
         System.out.println("Generating dungeon...");
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep((long)0.5);
 
-        var enemies = generateEnemies();
+        var enemies = mapEnemies();
         generateDungeon(enemies);
     }
 
