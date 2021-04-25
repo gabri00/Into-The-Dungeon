@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+// Contains the main functionalities and the main attributes for all the game classes
+
 public class MainStats {
     private String tag;
     private double hp, atk, def, crit;
 
+    // Constructor
     public MainStats(String tag, double hp, double atk, double def, double crit) {
         this.tag = tag;
         this.hp = hp;
@@ -52,9 +55,9 @@ public class MainStats {
         this.crit = crit;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
+    // public void setTag(String tag) {
+    //     this.tag = tag;
+    // }
 
     public void loadTexture(String textureFile) throws FileNotFoundException {
         File texture = new File(textureFile);
