@@ -6,9 +6,15 @@ import org.jetbrains.annotations.NotNull;
 public class Hero extends MainStats {
 
     public Weapon equippedWeapon;
+    private int level = 1;
+    private int exp = 0;
 
     public Hero(String tag, double hp, double atk, double def, double crit) {
         super(tag, hp, atk, def, crit);
+    }
+
+    public void tryLevelUp() {
+        // Gaining exp algorithm to implement
     }
 
     public void hit(@NotNull Enemy en) {

@@ -9,22 +9,31 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
 
+    private int currFloor = 0;
+    private int currChamber = 0;
+
+    Random rand = new Random();
+    final int nFloors = rand.nextInt(5) + 1 + 5;  // There can be between 5 and 10 floors
+    final int nChambers = 3;
+
+
     // Maps each enemy type to an integer value
     private Map<Integer, Enemy> mapEnemies() {
         Map<Integer, Enemy> enemies = new HashMap<>();
 
-        enemies.put(0, new Enemy("slime", 20.0, 10.0, 40.0, 0.0, 1));           // 0 : slime
-        enemies.put(1, new Enemy("goblin", 20.0, 10.0, 40.0, 0.0, 1));          // 1 : goblin
-        enemies.put(2, new Enemy("ogre", 250.0, 60.0, 40.0, 20.0, 2));          // 2 : ogre
-        enemies.put(3, new Enemy("demon", 250.0, 60.0, 40.0, 20.0, 2));         // 3 : demon
-        enemies.put(4, new Enemy("archdemon", 2000.0, 90.0, 50.0, 10.0, 3));    // 4 : archdemon
-        enemies.put(5, new Enemy("dragon", 2000.0, 90.0, 50.0, 10.0, 3));       // 5 : dragon
+        enemies.put(0, new Enemy("slime", 20.0, 10.0, 40.0, 0.0, 1, 10));           // 0 : slime
+        enemies.put(1, new Enemy("goblin", 20.0, 10.0, 40.0, 0.0, 1, 15));          // 1 : goblin
+        enemies.put(2, new Enemy("ogre", 250.0, 60.0, 40.0, 20.0, 2, 30));          // 2 : ogre
+        enemies.put(3, new Enemy("demon", 250.0, 60.0, 40.0, 20.0, 2, 40));         // 3 : demon
+        enemies.put(4, new Enemy("archdemon", 2000.0, 90.0, 50.0, 10.0, 3, 80));    // 4 : archdemon
+        enemies.put(5, new Enemy("dragon", 2000.0, 90.0, 50.0, 10.0, 3, 120));      // 5 : dragon
 
         return enemies;
     }
 
+
     // Just print some basic stuff when the program starts
-    public void initWorld(String[] args) {
+    public void initGame(String[] args) {
         if (args.length > 0) {
             if (args[0].equals("-h")) {
                 System.out.println("""
@@ -33,7 +42,7 @@ public class Game {
                             - archer hero
                             - sword hero
                             - spear hero
-                        Every hero begins with the same stats and then it will get upgrades based on the respective weapon chosen.
+                        Every hero begins with different stats and it also gets an upgrade based on the chosen weapon.
                         
                         After the hero selection you will begin the exploration of the dungeon, the latter will have n floors with 3 chambers for each floor.
                         In each room you will find an enemy waiting for you. Of course the fist floors contain easier monster, such as slimes and goblins.
@@ -69,33 +78,39 @@ public class Game {
     }
 
 
-    private void generateDungeon(Map<Integer, Enemy> enemies) {
-        Random rand = new Random();
+    // Create the dungeon matrix and assign an enemy to each chamber
+    public void generateDungeon() {
+        final var enemies = mapEnemies();
 
-        final int nChambers = 3;
-        final int nFloors = rand.nextInt(5) + 1 + 5;  // There can be between 5 and 10 floors
         Enemy[][] dungeon = new Enemy[nFloors][nChambers];
 
-        // Count the number of enemies
-        int enemyCount = enemies.keySet().size();   // Or = (int) enemies.keySet().stream().count();
+        System.out.println("Generating dungeon...\n" +
+                           "The dungeon has " + nFloors + " floors");
 
-        // Add an enemy to each chamber
+        // Add an enemy to each chamber based on the enemy danger
         for (short i = 0; i < nFloors; i++) {
-            for (short j = 0; j < nChambers; j++)
-                dungeon[i][j] = enemies.get(rand.nextInt(enemyCount));
+            for (short j = 0; j < nChambers; j++) {
+                if (i < 1.0/3.0 * nFloors)
+                    dungeon[i][j] = enemies.get(rand.nextInt(2));
+                else if (i >= 1.0/3.0 * nFloors && i < 2.0/3.0 * nFloors)
+                    dungeon[i][j] = enemies.get(rand.nextInt(2) + 2);
+                else
+                    dungeon[i][j] = enemies.get(rand.nextInt(2) + 4);
+            }
         }
 
         // Print test
         for (int i = 0; i < nFloors; i++) {
             for (int j = 0; j < nChambers; j++) {
                 var temp = dungeon[i][j];
-                System.out.println("Floor " + (i+1) + ", chamber " + (j+1) + ", Enemy: " + temp.getTag() + ", stats: " + temp.getHp() + " " + temp.getAtk() + " " + temp.getDef() + " " + temp.getCrit());
+                System.out.println("Floor " + (i+1) + ", chamber " + (j+1) + ", Enemy: " + temp.getTag());
             }
         }
     }
 
 
-    public void beginExploration() throws InterruptedException, FileNotFoundException {
+    // Choose the class of the hero and the weapon to use
+    public void initHero() throws FileNotFoundException {
         System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWeapon: ");
         Scanner in = new Scanner(System.in);
         String weaponChoice = in.nextLine();
@@ -122,12 +137,50 @@ public class Game {
             }
             default -> throw new IllegalStateException("Unexpected value: " + weaponChoice);
         }
+    }
 
-        System.out.println("Generating dungeon...");
-        TimeUnit.SECONDS.sleep((long)0.5);
 
-        var enemies = mapEnemies();
-        generateDungeon(enemies);
+    public byte actions() {
+        Scanner in = new Scanner(System.in);
+        String action;
+
+        byte statusCode = 0;
+
+        do {
+            System.out.print("""
+                    What would you like to do?
+                    type 'e' to explore the next chamber/floor
+                    type 'q' to quit the game
+                    action:\s""");
+
+            action = in.next().toLowerCase();
+
+            if (action.equals("e")) statusCode = explore();
+            else if (action.equals("q")) statusCode = quit();
+        } while (!action.equals("e") && !action.equals("q"));
+
+        return statusCode;
+    }
+
+
+    private byte explore() {
+        currChamber++;
+        currFloor++;
+
+        if (currFloor > nFloors)    return quit();
+
+        if (currFloor == 1) System.out.println("Welcome to the first floor, chamber " + currChamber);
+        else if (currFloor == nFloors - 1) System.out.println("Welcome to the last floor, chamber " + currChamber);
+        else System.out.println("Welcome to floor " + currFloor + ", chamber " + currChamber);
+
+        return 1;
+    }
+
+
+    private byte quit() {
+        System.out.println("bye");
+
+        return 0;
     }
 
 }
