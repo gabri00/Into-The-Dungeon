@@ -1,10 +1,7 @@
 package Essentials;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
@@ -15,6 +12,11 @@ public class Game {
     Random rand = new Random();
     final int nFloors = rand.nextInt(5) + 1 + 5;  // There can be between 5 and 10 floors
     final int nChambers = 3;
+
+    private Hero he;
+    private Enemy[][] dungeon;
+
+    Scanner in = new Scanner(System.in);
 
 
     // Maps each enemy type to an integer value
@@ -82,7 +84,7 @@ public class Game {
     public void generateDungeon() {
         final var enemies = mapEnemies();
 
-        Enemy[][] dungeon = new Enemy[nFloors][nChambers];
+        dungeon = new Enemy[nFloors][nChambers];
 
         System.out.println("Generating dungeon...\n" +
                            "The dungeon has " + nFloors + " floors");
@@ -112,25 +114,25 @@ public class Game {
     // Choose the class of the hero and the weapon to use
     public void initHero() throws FileNotFoundException {
         System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWeapon: ");
-        Scanner in = new Scanner(System.in);
+
         String weaponChoice = in.nextLine();
         weaponChoice = weaponChoice.toLowerCase();
 
         switch (weaponChoice) {
             case "sword" -> {
-                Hero he = new Hero("warrior", 500, 50, 60, 10);
+                he = new Hero("warrior", 500, 50, 60, 10);
                 Weapon sword = new Weapon("sword", 0.0, 22.5, 0.0, 5.0);
                 he.equipWeapon(sword);
                 he.loadTexture("assets/heroes/swordHero.txt");
             }
             case "spear" -> {
-                Hero he = new Hero("lancer", 500.0, 50.0, 60.0, 10.0);
+                he = new Hero("lancer", 500.0, 50.0, 60.0, 10.0);
                 Weapon spear = new Weapon("spear", 10.0, 30.0, 0.0, 1.0);
                 he.equipWeapon(spear);
                 he.loadTexture("assets/heroes/spearHero.txt");
             }
             case "bow" -> {
-                Hero he = new Hero("archer", 300.0, 100.0, 20.0, 37.0);
+                he = new Hero("archer", 300.0, 100.0, 20.0, 37.0);
                 Weapon bow = new Weapon("bow", 20.0, 30.0, 0.0, 25.0);
                 he.equipWeapon(bow);
                 he.loadTexture("assets/heroes/archerHero.txt");
@@ -141,7 +143,6 @@ public class Game {
 
 
     public byte actions() {
-        Scanner in = new Scanner(System.in);
         String action;
 
         byte statusCode = 0;
@@ -174,9 +175,32 @@ public class Game {
         else if (currFloor == nFloors) System.out.println("Welcome to the last floor, chamber " + currChamber);
         else System.out.println("Welcome to floor " + currFloor + ", chamber " + currChamber);
 
+        fight(currFloor, currChamber);
+
         if (currFloor >= nFloors && currChamber == 3)    return quit();
 
         return 1;
+    }
+
+
+    private void fight(final int floor, final int chamber) {
+        Enemy currEnemy = dungeon[floor][chamber];
+        System.out.println("Start the fight against: " + currEnemy.getTag());
+        boolean heroAlive = true, enemyAlive = true;
+
+        while (heroAlive && enemyAlive) {
+            System.out.print("Your turn! Attack (a) or stay in a defense position (d)? ");
+            String move = in.next().toLowerCase();
+
+            if (move.equals("a"))   he.hit(currEnemy);
+            else if (move.equals("d"))  he.reinforces();
+
+            System.out.println("Enemy turn to attack!");
+            currEnemy.hit(he);
+
+            if (currEnemy.getHp() <= 0) enemyAlive = false;
+            if (he.getHp() <= 0)    heroAlive = false;
+        }
     }
 
 
