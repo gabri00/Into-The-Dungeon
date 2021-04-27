@@ -165,13 +165,16 @@ public class Game {
 
     private byte explore() {
         currChamber++;
-        currFloor++;
 
-        if (currFloor > nFloors)    return quit();
+        if (currFloor == 0 || currChamber > 3) currFloor++;
+
+        if (currChamber > 3)    currChamber = 1;
 
         if (currFloor == 1) System.out.println("Welcome to the first floor, chamber " + currChamber);
-        else if (currFloor == nFloors - 1) System.out.println("Welcome to the last floor, chamber " + currChamber);
+        else if (currFloor == nFloors) System.out.println("Welcome to the last floor, chamber " + currChamber);
         else System.out.println("Welcome to floor " + currFloor + ", chamber " + currChamber);
+
+        if (currFloor >= nFloors && currChamber == 3)    return quit();
 
         return 1;
     }
