@@ -10,13 +10,16 @@ public class MainStats {
     private String tag;
     private double hp, atk, def, crit;
 
-    // Constructor
     public MainStats(String tag, double hp, double atk, double def, double crit) {
         this.tag = tag;
         this.hp = hp;
         this.atk = atk;
         this.def = def;
         this.crit = crit;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public double getHp() {
@@ -35,10 +38,6 @@ public class MainStats {
         return crit;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
     public void setHp(double hp) {
         this.hp = hp;
     }
@@ -55,10 +54,6 @@ public class MainStats {
         this.crit = crit;
     }
 
-    // public void setTag(String tag) {
-    //     this.tag = tag;
-    // }
-
     public void loadTexture(String textureFile) throws FileNotFoundException {
         File texture = new File(textureFile);
         Scanner reader = new Scanner(texture);
@@ -66,9 +61,12 @@ public class MainStats {
         if (texture.canRead()) {
             while (reader.hasNextLine())
                 System.out.println(reader.nextLine());
-
             reader.close();
         }
+    }
+
+    public String stringStats() {
+        return "HP: " + getHp() + ", ATK: " + getAtk() + ", DEF: " + getDef() + ", CR: " + getCrit();
     }
 
 }

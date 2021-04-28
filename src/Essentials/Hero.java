@@ -1,8 +1,5 @@
 package Essentials;
 
-import org.jetbrains.annotations.NotNull;
-
-
 public class Hero extends MainStats {
 
     public Weapon equippedWeapon;
@@ -17,12 +14,12 @@ public class Hero extends MainStats {
         // Gaining exp algorithm to implement
     }
 
-    public void hit(@NotNull Enemy en) {
-        en.setHp(en.getHp() - this.getAtk() / en.getDef());
+    public void hit(Enemy en) {
+        en.setHp(en.getHp() - (this.getAtk() - en.getDef()));
     }
 
     public void reinforces() {
-        double def_percentage = this.getDef() * 0.1;    // Increment def by 10%
+        double def_percentage = this.getDef() * 0.05;    // Increment def by 5%
         this.setDef(this.getDef() + def_percentage);
     }
 

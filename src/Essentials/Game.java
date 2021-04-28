@@ -2,7 +2,6 @@ package Essentials;
 
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Game {
 
@@ -23,12 +22,12 @@ public class Game {
     private Map<Integer, Enemy> mapEnemies() {
         Map<Integer, Enemy> enemies = new HashMap<>();
 
-        enemies.put(0, new Enemy("slime", 20.0, 10.0, 40.0, 0.0, 1, 10));           // 0 : slime
-        enemies.put(1, new Enemy("goblin", 20.0, 10.0, 40.0, 0.0, 1, 15));          // 1 : goblin
-        enemies.put(2, new Enemy("ogre", 250.0, 60.0, 40.0, 20.0, 2, 30));          // 2 : ogre
-        enemies.put(3, new Enemy("demon", 250.0, 60.0, 40.0, 20.0, 2, 40));         // 3 : demon
-        enemies.put(4, new Enemy("archdemon", 2000.0, 90.0, 50.0, 10.0, 3, 80));    // 4 : archdemon
-        enemies.put(5, new Enemy("dragon", 2000.0, 90.0, 50.0, 10.0, 3, 120));      // 5 : dragon
+        enemies.put(0, new Enemy("slime", 20.0, 10.0, 10.0, 0.0, 1, 10));           // 0 : slime
+        enemies.put(1, new Enemy("goblin", 20.0, 10.0, 10.0, 0.0, 1, 15));          // 1 : goblin
+        enemies.put(2, new Enemy("ogre", 250.0, 60.0, 10.0, 20.0, 2, 30));          // 2 : ogre
+        enemies.put(3, new Enemy("demon", 250.0, 60.0, 10.0, 20.0, 2, 40));         // 3 : demon
+        enemies.put(4, new Enemy("archdemon", 2000.0, 90.0, 20.0, 10.0, 3, 80));    // 4 : archdemon
+        enemies.put(5, new Enemy("dragon", 2000.0, 90.0, 20.0, 10.0, 3, 120));      // 5 : dragon
 
         return enemies;
     }
@@ -71,9 +70,7 @@ public class Game {
         }
         else {
             System.out.print("""
-                    Welcome to the dungeon hero!
-                    Let's begin your adventure...
-                    
+                    Welcome to the dungeon! Let's begin your adventure...
                     Please increase the console size for a better gaming experience!
                     """);
         }
@@ -86,8 +83,7 @@ public class Game {
 
         dungeon = new Enemy[nFloors][nChambers];
 
-        System.out.println("Generating dungeon...\n" +
-                           "The dungeon has " + nFloors + " floors");
+        System.out.println("Generating dungeon... The dungeon has " + nFloors + " floors");
 
         // Add an enemy to each chamber based on the enemy danger
         for (short i = 0; i < nFloors; i++) {
@@ -101,26 +97,27 @@ public class Game {
             }
         }
 
-        // Print test
-        for (int i = 0; i < nFloors; i++) {
-            for (int j = 0; j < nChambers; j++) {
-                var temp = dungeon[i][j];
-                System.out.println("Floor " + (i+1) + ", chamber " + (j+1) + ", Enemy: " + temp.getTag());
-            }
-        }
+//        // Print test
+//        for (int i = 0; i < nFloors; i++) {
+//            for (int j = 0; j < nChambers; j++)
+//                System.out.println("Floor " + (i + 1) + ", chamber " + (j + 1) + ", Enemy: " + dungeon[i][j].getTag());
+//        }
     }
 
 
     // Choose the class of the hero and the weapon to use
     public void initHero() throws FileNotFoundException {
-        System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWeapon: ");
+        System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWhat do you want to pick (sword/bow/spear)? ");
+        String weaponChoice;
 
-        String weaponChoice = in.nextLine();
-        weaponChoice = weaponChoice.toLowerCase();
+        do {
+            weaponChoice = in.nextLine();
+            weaponChoice = weaponChoice.toLowerCase();
+        } while (!(weaponChoice.equals("sword") || weaponChoice.equals("spear") || weaponChoice.equals("bow")));
 
         switch (weaponChoice) {
             case "sword" -> {
-                he = new Hero("warrior", 500, 50, 60, 10);
+                he = new Hero("warrior", 500.0, 50.0, 60.0, 10.0);
                 Weapon sword = new Weapon("sword", 0.0, 22.5, 0.0, 5.0);
                 he.equipWeapon(sword);
                 he.loadTexture("assets/heroes/swordHero.txt");
@@ -175,7 +172,10 @@ public class Game {
         else if (currFloor == nFloors) System.out.println("Welcome to the last floor, chamber " + currChamber);
         else System.out.println("Welcome to floor " + currFloor + ", chamber " + currChamber);
 
-        fight(currFloor, currChamber);
+        System.out.println();
+
+        if (currChamber > 3)    fight(currFloor, currChamber - 1);
+        else    fight(currFloor, currChamber);
 
         if (currFloor >= nFloors && currChamber == 3)    return quit();
 
@@ -185,21 +185,33 @@ public class Game {
 
     private void fight(final int floor, final int chamber) {
         Enemy currEnemy = dungeon[floor][chamber];
-        System.out.println("Start the fight against: " + currEnemy.getTag());
-        boolean heroAlive = true, enemyAlive = true;
+        double currDef = he.getDef();
 
-        while (heroAlive && enemyAlive) {
-            System.out.print("Your turn! Attack (a) or stay in a defense position (d)? ");
+        System.out.println("Your enemy is: " + currEnemy.getTag());
+
+        while (true) {
+            System.out.println("Your current stats: " + he.stringStats());
+            System.out.println("Enemy current stats: " + currEnemy.stringStats());
+
+            System.out.print("\nYour turn! Attack (a) or stay in a defense position (d)? ");
             String move = in.next().toLowerCase();
 
             if (move.equals("a"))   he.hit(currEnemy);
             else if (move.equals("d"))  he.reinforces();
 
-            System.out.println("Enemy turn to attack!");
+            if (currEnemy.getHp() <= 0) {
+                System.out.println("You killed the " + currEnemy.getTag());
+                he.setDef(currDef);
+                break;
+            }
+            System.out.println("Enemy turn to attack!\n");
             currEnemy.hit(he);
 
-            if (currEnemy.getHp() <= 0) enemyAlive = false;
-            if (he.getHp() <= 0)    heroAlive = false;
+            if (he.getHp() <= 0) {
+                System.out.println("You got killed!");
+                reset();
+                break;
+            }
         }
     }
 
@@ -208,6 +220,11 @@ public class Game {
         System.out.println("bye");
 
         return 0;
+    }
+
+
+    private void reset() {
+
     }
 
 }

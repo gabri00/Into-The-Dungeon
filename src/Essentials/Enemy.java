@@ -1,7 +1,5 @@
 package Essentials;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Enemy extends MainStats {
 
     private final int danger;       // 1: slimes and goblins, 2: ogre and demons, 3: archdemons and dragons
@@ -13,8 +11,8 @@ public class Enemy extends MainStats {
         this.expDrop = expDrop;
     }
 
-    public void hit(@NotNull Hero he) {
-        he.setHp(he.getHp() - this.getAtk() / he.getDef());
+    public void hit(Hero he) {
+        he.setHp(he.getHp() - (this.getAtk() - he.getDef()));
     }
 
 }
