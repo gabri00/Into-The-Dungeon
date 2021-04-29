@@ -1,40 +1,76 @@
 package Essentials;
 
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
 
-    private int currFloor = 0;
-    private int currChamber = 0;
-
     Random rand = new Random();
-    final int nFloors = rand.nextInt(5) + 1 + 5;  // There can be between 5 and 10 floors
-    final int nChambers = 3;
-
-    private Hero he;
-    private Enemy[][] dungeon;
-
     Scanner in = new Scanner(System.in);
+
+    private final int nFloors = 10, nChambers = 3;
+
+    private int currFloor = 0, currChamber = 0;
+
+    private Enemy[][] dungeon = new Enemy[nFloors][nChambers];
+    private Hero he;
 
 
     // Maps each enemy type to an integer value
     private Map<Integer, Enemy> mapEnemies() {
         Map<Integer, Enemy> enemies = new HashMap<>();
 
-        enemies.put(0, new Enemy("slime", 20.0, 10.0, 10.0, 0.0, 1, 10));           // 0 : slime
-        enemies.put(1, new Enemy("goblin", 20.0, 10.0, 10.0, 0.0, 1, 15));          // 1 : goblin
-        enemies.put(2, new Enemy("ogre", 250.0, 60.0, 10.0, 20.0, 2, 30));          // 2 : ogre
-        enemies.put(3, new Enemy("demon", 250.0, 60.0, 10.0, 20.0, 2, 40));         // 3 : demon
-        enemies.put(4, new Enemy("archdemon", 2000.0, 90.0, 20.0, 10.0, 3, 80));    // 4 : archdemon
-        enemies.put(5, new Enemy("dragon", 2000.0, 90.0, 20.0, 10.0, 3, 120));      // 5 : dragon
+        enemies.put(0, new Enemy("slime", 20, 10, 10, 0, 1, 10));           // 0 : slime
+        enemies.put(1, new Enemy("goblin", 20, 10, 10, 0, 1, 15));          // 1 : goblin
+        enemies.put(2, new Enemy("ogre", 250, 60, 10, 20, 2, 30));          // 2 : ogre
+        enemies.put(3, new Enemy("demon", 250, 60, 10, 20, 2, 40));         // 3 : demon
+        enemies.put(4, new Enemy("archdemon", 2000, 90, 20, 10, 3, 80));    // 4 : archdemon
+        enemies.put(5, new Enemy("dragon", 2000, 90, 20, 10, 3, 120));      // 5 : dragon
 
         return enemies;
     }
 
 
-    // Just print some basic stuff when the program starts
-    public void initGame(String[] args) {
+    // Maps each hero class to a string identifier
+    private Map<String, Hero> mapHeroes() {
+        Map<String, Hero> heroes = new HashMap<>();
+
+        heroes.put("warrior", new Hero("warrior", 20, 10, 10, 0));
+        heroes.put("lancer", new Hero("lancer", 20, 10, 10, 0));
+        heroes.put("archer", new Hero("archer", 250, 60, 10, 20));
+
+        return heroes;
+    }
+
+
+    // Maps each weapon type to a string identifier
+    private Map<String, Weapon> mapWeapons() {
+        Map<String, Weapon> weapons = new HashMap<>();
+
+        weapons.put("sword", new Weapon("sword", 20, 10, 10, 0));
+        weapons.put("spear", new Weapon("spear", 20, 10, 10, 0));
+        weapons.put("bow", new Weapon("bow", 250, 60, 10, 20));
+
+        return weapons;
+    }
+
+    // Maps each artifact type to an integer value
+    private Map<Integer, Artifact> mapArtifacts() {
+        Map<Integer, Artifact> artifacts = new HashMap<>();
+
+        artifacts.put(0, new Artifact("armlet", 20, 10, 10, 0));
+        artifacts.put(1, new Artifact("ring", 20, 10, 10, 0));
+        artifacts.put(2, new Artifact("necklet", 250, 60, 10, 20));
+
+        return artifacts;
+    }
+
+
+    // Just print some basic instructions when the game starts
+    public void initGame(final String[] args) {
         if (args.length > 0) {
             if (args[0].equals("-h")) {
                 System.out.println("""
@@ -68,12 +104,10 @@ public class Game {
 
             System.exit(0);
         }
-        else {
-            System.out.print("""
-                    Welcome to the dungeon! Let's begin your adventure...
-                    Please increase the console size for a better gaming experience!
-                    """);
-        }
+        else System.out.print("""
+                Welcome to the dungeon! Let's begin your adventure...
+                Please increase the console size for a better gaming experience!
+                """);
     }
 
 
@@ -81,13 +115,13 @@ public class Game {
     public void generateDungeon() {
         final var enemies = mapEnemies();
 
-        dungeon = new Enemy[nFloors][nChambers];
+        // dungeon = new Enemy[nFloors][nChambers];
 
-        System.out.println("Generating dungeon... The dungeon has " + nFloors + " floors");
+        System.out.printf("Generating dungeon... The dungeon has %d floors and %d rooms per floor%n", nFloors, nChambers);
 
-        // Add an enemy to each chamber based on the enemy danger
-        for (short i = 0; i < nFloors; i++) {
-            for (short j = 0; j < nChambers; j++) {
+        // Add an enemy to each chamber based on the enemy danger, (approximately) one third for each danger zone
+        for (byte i = 0; i < nFloors; i++) {
+            for (byte j = 0; j < nChambers; j++) {
                 if (i < 1.0/3.0 * nFloors)
                     dungeon[i][j] = enemies.get(rand.nextInt(2));
                 else if (i >= 1.0/3.0 * nFloors && i < 2.0/3.0 * nFloors)
@@ -96,42 +130,35 @@ public class Game {
                     dungeon[i][j] = enemies.get(rand.nextInt(2) + 4);
             }
         }
-
-//        // Print test
-//        for (int i = 0; i < nFloors; i++) {
-//            for (int j = 0; j < nChambers; j++)
-//                System.out.println("Floor " + (i + 1) + ", chamber " + (j + 1) + ", Enemy: " + dungeon[i][j].getTag());
-//        }
     }
 
 
     // Choose the class of the hero and the weapon to use
     public void initHero() throws FileNotFoundException {
+        final var weapons = mapWeapons();
+        final var heroTypes = mapHeroes();
+
+
         System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWhat do you want to pick (sword/bow/spear)? ");
         String weaponChoice;
 
-        do {
-            weaponChoice = in.nextLine();
-            weaponChoice = weaponChoice.toLowerCase();
-        } while (!(weaponChoice.equals("sword") || weaponChoice.equals("spear") || weaponChoice.equals("bow")));
+        do weaponChoice = in.nextLine().toLowerCase();
+        while (!(weaponChoice.equals("sword") || weaponChoice.equals("spear") || weaponChoice.equals("bow")));
 
         switch (weaponChoice) {
             case "sword" -> {
-                he = new Hero("warrior", 500.0, 50.0, 60.0, 10.0);
-                Weapon sword = new Weapon("sword", 0.0, 22.5, 0.0, 5.0);
-                he.equipWeapon(sword);
-                he.loadTexture("assets/heroes/swordHero.txt");
+                he = heroTypes.get("warrior");
+                he.equipWeapon(weapons.get("sword"));
+                he.loadTexture("assets/heroes/warriorHero.txt");
             }
             case "spear" -> {
-                he = new Hero("lancer", 500.0, 50.0, 60.0, 10.0);
-                Weapon spear = new Weapon("spear", 10.0, 30.0, 0.0, 1.0);
-                he.equipWeapon(spear);
-                he.loadTexture("assets/heroes/spearHero.txt");
+                he = heroTypes.get("lancer");
+                he.equipWeapon(weapons.get("spear"));
+                he.loadTexture("assets/heroes/lancerHero.txt");
             }
             case "bow" -> {
-                he = new Hero("archer", 300.0, 100.0, 20.0, 37.0);
-                Weapon bow = new Weapon("bow", 20.0, 30.0, 0.0, 25.0);
-                he.equipWeapon(bow);
+                he = heroTypes.get("archer");
+                he.equipWeapon(weapons.get("bow"));
                 he.loadTexture("assets/heroes/archerHero.txt");
             }
             default -> throw new IllegalStateException("Unexpected value: " + weaponChoice);
@@ -139,10 +166,10 @@ public class Game {
     }
 
 
-    public byte actions() {
+    public byte actions() throws FileNotFoundException {
         String action;
 
-        byte statusCode = 0;
+        byte statusCode = 0;    // 0: quit the game, 1: explore next chamber
 
         do {
             System.out.print("""
@@ -154,14 +181,15 @@ public class Game {
             action = in.next().toLowerCase();
 
             if (action.equals("e")) statusCode = explore();
-            else if (action.equals("q")) statusCode = quit();
+            else if (action.equals("q")) statusCode = quit(false);
+
         } while (!action.equals("e") && !action.equals("q"));
 
         return statusCode;
     }
 
 
-    private byte explore() {
+    private byte explore() throws FileNotFoundException {
         currChamber++;
 
         if (currFloor == 0 || currChamber > 3) currFloor++;
@@ -170,28 +198,30 @@ public class Game {
 
         if (currFloor == 1) System.out.println("Welcome to the first floor, chamber " + currChamber);
         else if (currFloor == nFloors) System.out.println("Welcome to the last floor, chamber " + currChamber);
-        else System.out.println("Welcome to floor " + currFloor + ", chamber " + currChamber);
+        else System.out.printf("Welcome to floor %d, chamber %d%n", currFloor, currChamber);
 
         System.out.println();
 
-        if (currChamber > 3)    fight(currFloor, currChamber - 1);
-        else    fight(currFloor, currChamber);
+        fight(currFloor, currChamber > 3 ? currChamber - 1 : currChamber);
 
-        if (currFloor >= nFloors && currChamber == 3)    return quit();
+        if (currFloor >= nFloors && currChamber == 3) return quit(true);
 
         return 1;
     }
 
 
-    private void fight(final int floor, final int chamber) {
+    private void fight(final int floor, final int chamber) throws FileNotFoundException {
         Enemy currEnemy = dungeon[floor][chamber];
-        double currDef = he.getDef();
+        int currDef = he.getDef();
 
         System.out.println("Your enemy is: " + currEnemy.getTag());
+        currEnemy.loadTexture("assets/enemies/" + currEnemy.getTag() + ".txt");
 
         while (true) {
-            System.out.println("Your current stats: " + he.stringStats());
-            System.out.println("Enemy current stats: " + currEnemy.stringStats());
+            System.out.print("Your current stats: ");
+            he.printStats();
+            System.out.print("Enemy current stats: ");
+            currEnemy.printStats();
 
             System.out.print("\nYour turn! Attack (a) or stay in a defense position (d)? ");
             String move = in.next().toLowerCase();
@@ -208,22 +238,22 @@ public class Game {
             currEnemy.hit(he);
 
             if (he.getHp() <= 0) {
-                System.out.println("You got killed!");
-                reset();
+                System.out.println("You got killed! :(\nYou can revive at the last chamber you've completed or you can restart a fresh adventure");
+                quit(false);
                 break;
             }
         }
     }
 
 
-    private byte quit() {
-        System.out.println("bye");
-
+    private byte quit(boolean won) {
+        if (won) System.out.println("Congratulations!!! Your cleared all the rooms in the dungeon!\nThanks for playing :)");
         return 0;
     }
 
 
-    private void reset() {
+    // Saves the current state of the game at the end of each fight
+    public void autoSave() {
 
     }
 

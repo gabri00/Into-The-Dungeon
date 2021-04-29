@@ -7,7 +7,7 @@ public class Enemy extends MainStats {
     private final int danger;       // 1: slimes and goblins, 2: ogre and demons, 3: archdemons and dragons
     private final int expDrop;
 
-    public Enemy(String tag, double hp, double atk, double def, double crit, int danger, int expDrop) {
+    public Enemy(String tag, int hp, int atk, int def, int crit, int danger, int expDrop) {
         super(tag, hp, atk, def, crit);
         this.danger = danger;
         this.expDrop = expDrop;

@@ -8,9 +8,9 @@ import java.util.Scanner;
 
 public class MainStats {
     private String tag;
-    private double hp, atk, def, crit;
+    private int hp, atk, def, crit;
 
-    public MainStats(String tag, double hp, double atk, double def, double crit) {
+    public MainStats(String tag, int hp, int atk, int def, int crit) {
         this.tag = tag;
         this.hp = hp;
         this.atk = atk;
@@ -22,35 +22,35 @@ public class MainStats {
         return tag;
     }
 
-    public double getHp() {
+    public int getHp() {
         return hp;
     }
 
-    public double getAtk() {
+    public int getAtk() {
         return atk;
     }
 
-    public double getDef() {
+    public int getDef() {
         return def;
     }
 
-    public double getCrit() {
+    public int getCrit() {
         return crit;
     }
 
-    public void setHp(double hp) {
+    public void setHp(int hp) {
         this.hp = hp;
     }
 
-    public void setAtk(double atk) {
+    public void setAtk(int atk) {
         this.atk = atk;
     }
 
-    public void setDef(double def) {
+    public void setDef(int def) {
         this.def = def;
     }
 
-    public void setCrit(double crit) {
+    public void setCrit(int crit) {
         this.crit = crit;
     }
 
@@ -65,8 +65,8 @@ public class MainStats {
         }
     }
 
-    public String stringStats() {
-        return "HP: " + getHp() + ", ATK: " + getAtk() + ", DEF: " + getDef() + ", CR: " + getCrit();
+    public void printStats() {
+        System.out.println("HP: " + getHp() + ", ATK: " + getAtk() + ", DEF: " + getDef() + ", CR: " + getCrit());
     }
 
 }

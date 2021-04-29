@@ -1,14 +1,12 @@
 package Essentials;
 
-import static java.lang.Math.floor;
-
 public class Hero extends MainStats {
 
     private Weapon equippedWeapon;
     private int level = 1;
     private int exp = 1;
 
-    public Hero(String tag, double hp, double atk, double def, double crit) {
+    public Hero(String tag, int hp, int atk, int def, int crit) {
         super(tag, hp, atk, def, crit);
     }
 
@@ -42,7 +40,7 @@ public class Hero extends MainStats {
 
     private void levelUp() {
         level++;
-        setHp(floor(getHp() * 1.5));
+        setHp((int) (getHp() * 1.5));
         setAtk(getAtk() + 20);
         setDef(getDef() + 5);
         setCrit(getCrit());
@@ -53,7 +51,7 @@ public class Hero extends MainStats {
     }
 
     public void reinforces() {
-        this.setDef(this.getDef() + floor(this.getDef() * 0.05));  // Increment def by 5%
+        this.setDef((int) (this.getDef() + this.getDef() * 0.05));  // Increment def by 5%
     }
 
     public void equipWeapon(final Weapon w) {
