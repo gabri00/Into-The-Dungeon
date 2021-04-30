@@ -1,4 +1,6 @@
-package Essentials;
+package Core.Classes;
+
+import Core.MainStats;
 
 public class Hero extends MainStats {
 
@@ -44,10 +46,13 @@ public class Hero extends MainStats {
         setAtk(getAtk() + 20);
         setDef(getDef() + 5);
         setCrit(getCrit());
+
+        System.out.println("You upgraded to " + level);
     }
 
     public void hit(Enemy en) {
-        en.setHp(en.getHp() - (this.getAtk() - en.getDef()));
+        final int dmg = this.getAtk() - en.getDef();
+        if (dmg > 0) en.setHp(en.getHp() - dmg);
     }
 
     public void reinforces() {

@@ -1,4 +1,6 @@
-package Essentials;
+package Core.Classes;
+
+import Core.MainStats;
 
 import java.util.Random;
 
@@ -13,8 +15,13 @@ public class Enemy extends MainStats {
         this.expDrop = expDrop;
     }
 
+    public int getExpDrop() {
+        return expDrop;
+    }
+
     public void hit(Hero he) {
-        he.setHp(he.getHp() - (this.getAtk() - he.getDef()));
+        final int dmg = this.getAtk() - he.getDef();
+        if (dmg > 0) he.setHp(he.getHp() - dmg);
     }
 
     public void dropArtifact() {

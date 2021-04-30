@@ -1,4 +1,4 @@
-package Essentials;
+package Core;
 
 import java.io.File;
 import java.io.FileNotFoundException;

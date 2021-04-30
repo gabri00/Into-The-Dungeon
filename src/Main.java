@@ -1,10 +1,10 @@
-import Essentials.Game;
+import Core.Game;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         Game game = new Game();
 
         game.initGame(args);
@@ -17,7 +17,10 @@ public class Main {
         System.out.println();
 
         System.out.println("Finally we are going into the dungeon! Good luck and have fun!\n");
-        while (game.actions() != 0) System.out.println();
+        while (game.actions() != 0) {
+            System.out.println();
+            game.autoSave();
+        }
     }
 
 }

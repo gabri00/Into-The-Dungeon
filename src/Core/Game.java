@@ -1,6 +1,12 @@
-package Essentials;
+package Core;
+
+import Core.Classes.Artifact;
+import Core.Classes.Enemy;
+import Core.Classes.Hero;
+import Core.Classes.Weapon;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -202,7 +208,7 @@ public class Game {
 
         System.out.println();
 
-        fight(currFloor, currChamber > 3 ? currChamber - 1 : currChamber);
+        fight(currFloor, currChamber >= 3 ? currChamber - 1 : currChamber);
 
         if (currFloor >= nFloors && currChamber == 3) return quit(true);
 
@@ -228,10 +234,12 @@ public class Game {
 
             if (move.equals("a"))   he.hit(currEnemy);
             else if (move.equals("d"))  he.reinforces();
+            else System.out.println("Command incorrect");
 
             if (currEnemy.getHp() <= 0) {
                 System.out.println("You killed the " + currEnemy.getTag());
                 he.setDef(currDef);
+                he.addExp(currEnemy.getExpDrop());
                 break;
             }
             System.out.println("Enemy turn to attack!\n");
@@ -253,8 +261,22 @@ public class Game {
 
 
     // Saves the current state of the game at the end of each fight
-    public void autoSave() {
+    public void autoSave() throws IOException {
+/*
+        BufferedWriter out = null;
 
+        try {
+            FileWriter file = new FileWriter("log.data");
+            out = new BufferedWriter(file);
+            out.write("Hero: " + he.getTag());
+        }
+        catch (IOException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+        finally {
+            if (out != null) out.close();
+        }
+*/
     }
 
 }
