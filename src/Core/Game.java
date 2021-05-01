@@ -5,19 +5,18 @@ import Core.Classes.Enemy;
 import Core.Classes.Hero;
 import Core.Classes.Weapon;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements java.io.Serializable {
 
-    Random rand = new Random();
-    Scanner in = new Scanner(System.in);
+    private transient Random rand = new Random();
+    private transient Scanner in = new Scanner(System.in);
 
-    private final int nFloors = 10, nChambers = 3;
+    private final transient int nFloors = 10, nChambers = 3;
 
     private int currFloor = 0, currChamber = 0;
 
@@ -78,7 +77,7 @@ public class Game {
     // Just print some basic instructions when the game starts
     public void initGame(final String[] args) {
         if (args.length > 0) {
-            if (args[0].equals("-h")) {
+            if (args[0].equals("-h") || args[0].equals("--help")) {
                 System.out.println("""
                         Some basic guidelines for the game:
                         At the very beginning you will have to choose a class for your hero, you can choose between:
@@ -184,7 +183,8 @@ public class Game {
                     type 'q' to quit the game
                     action:\s""");
 
-            action = in.next().toLowerCase();
+            Scanner in2 = new Scanner(System.in);
+            action = in2.next().toLowerCase();
 
             if (action.equals("e")) statusCode = explore();
             else if (action.equals("q")) statusCode = quit(false);
@@ -230,7 +230,8 @@ public class Game {
             currEnemy.printStats();
 
             System.out.print("\nYour turn! Attack (a) or stay in a defense position (d)? ");
-            String move = in.next().toLowerCase();
+            Scanner in2 = new Scanner(System.in);
+            String move = in2.next().toLowerCase();
 
             if (move.equals("a"))   he.hit(currEnemy);
             else if (move.equals("d"))  he.reinforces();
@@ -261,22 +262,35 @@ public class Game {
 
 
     // Saves the current state of the game at the end of each fight
-    public void autoSave() throws IOException {
-/*
-        BufferedWriter out = null;
+    public void autoSave(Game game) {
+        try {
+            FileOutputStream fos = new FileOutputStream("log.sav");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(game);
+            oos.flush();
+            oos.close();
+            System.out.println("Game saved!");
+        } catch (IOException e) {
+            System.out.println("Serialization error!\n" + e.getClass() + ": " + e.getMessage());
+        }
+    }
+
+
+    // Loads the last game state
+    public Game loadGame() {
+        Game game = null;
 
         try {
-            FileWriter file = new FileWriter("log.data");
-            out = new BufferedWriter(file);
-            out.write("Hero: " + he.getTag());
+            FileInputStream fis = new FileInputStream("log.sav");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            game = (Game) ois.readObject();
+            ois.close();
+            System.out.println("Game loaded");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Serialization error!\n" + e.getClass() + ": " + e.getMessage());
         }
-        catch (IOException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-        finally {
-            if (out != null) out.close();
-        }
-*/
+
+        return game;
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 // Contains the main functionalities and the main attributes for all the game classes
 
-public class MainStats {
+public class MainStats implements java.io.Serializable {
     private String tag;
     private int hp, atk, def, crit;
 
