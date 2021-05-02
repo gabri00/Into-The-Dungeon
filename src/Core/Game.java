@@ -1,9 +1,9 @@
 package Core;
 
-import Core.Classes.Artifact;
-import Core.Classes.Enemy;
-import Core.Classes.Hero;
-import Core.Classes.Weapon;
+import Classes.Artifact;
+import Classes.Enemy;
+import Classes.Hero;
+import Classes.Weapon;
 
 import java.io.*;
 import java.util.HashMap;
@@ -147,7 +147,7 @@ public class Game implements java.io.Serializable {
         System.out.print("First of all, you should choose a weapon if you don't want to get killed!\nWhat do you want to pick (sword/bow/spear)? ");
         String weaponChoice;
 
-        do weaponChoice = in.nextLine().toLowerCase();
+        do weaponChoice = in.nextLine().trim().toLowerCase();
         while (!(weaponChoice.equals("sword") || weaponChoice.equals("spear") || weaponChoice.equals("bow")));
 
         switch (weaponChoice) {
@@ -231,7 +231,7 @@ public class Game implements java.io.Serializable {
 
             System.out.print("\nYour turn! Attack (a) or stay in a defense position (d)? ");
             Scanner in2 = new Scanner(System.in);
-            String move = in2.next().toLowerCase();
+            String move = in2.next().trim().toLowerCase();
 
             if (move.equals("a"))   he.hit(currEnemy);
             else if (move.equals("d"))  he.reinforces();

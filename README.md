@@ -1,27 +1,25 @@
-# Java fight game
- Explore a dungeon from your terminal!
+# The dungeon
+ Choose your hero and explore the dungeon from your terminal.<br/>
+ This simple game was developed for the sake of learning the basics of Java.<br/><br/>
+ In the following sections you will find some information and some instructions about the game.
 
-## Usage
-`java Main <options>`
+##Project classes
+    .
+    ├── Main                # Game loop and basic logic
+    ├── Game                # Containst all the game logic
+    └── MainStats           # Basic parameters (such as attack, defense, HP, ...)
+        ├── Hero
+        ├── Enemy
+        ├── Weapon
+        └── Artifact
 
-#### Options
+## Run the game
+`java Main <args>`
+> *NOTE: no external libraries are needed to run the game.*
+
+### Arguments
 - `-h` or `--help` to display the game instructions
-- `-l` or `--load` to load a previous saved game
+- `-l` or `--load` to load the last checkpoint of a previous saved game
 
-### Enemies
-- Slime
-- Goblin
-- Ogre
-- Demon
-- Archdemon
-- Dragon
-
-### Weapons
-- Bow
-- Sword
-- Spear
-
-### Artifacts
-- Necklace
-- Armlet
-- Ring
+### License
+Source code, expect game assets, are available under the MIT license.

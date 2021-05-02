@@ -1,4 +1,4 @@
-package Core;
+package Classes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.util.Scanner;
 // Contains the main functionalities and the main attributes for all the game classes
 
 public class MainStats implements java.io.Serializable {
-    private String tag;
+    private final String tag;
     private int hp, atk, def, crit;
 
     public MainStats(String tag, int hp, int atk, int def, int crit) {

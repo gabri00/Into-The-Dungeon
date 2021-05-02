@@ -1,6 +1,4 @@
-package Core.Classes;
-
-import Core.MainStats;
+package Classes;
 
 public class Weapon extends MainStats {
 
