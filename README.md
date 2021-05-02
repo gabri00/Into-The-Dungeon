@@ -24,4 +24,4 @@
 - `-l` or `--load` to load the last checkpoint of a previous saved game
 
 ### License
-Source code, expect game assets, are available under the MIT license.
+Source codes, expect game assets, are available under the MIT license.
