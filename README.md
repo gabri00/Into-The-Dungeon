@@ -4,6 +4,7 @@
  In the following sections you will find some information and some instructions about the game.
 
 ##Project classes
+```
     .
     ├── Main                # Game loop and basic logic
     ├── Game                # Containst all the game logic
@@ -12,6 +13,7 @@
         ├── Enemy
         ├── Weapon
         └── Artifact
+```
 
 ## Run the game
 `java Main <args>`
