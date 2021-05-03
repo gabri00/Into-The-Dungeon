@@ -1,7 +1,6 @@
 # The dungeon
  Choose your hero and explore the dungeon from your terminal.<br/>
- This simple game was developed for the sake of learning the basics of Java.<br/><br/>
- In the following sections you will find some information and some instructions about the game.
+ This simple game was developed for the sake of learning the basics of Java.
 
 ## Project classes
 ```
