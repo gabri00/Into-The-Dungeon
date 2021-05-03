@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 // Contains the main functionalities and the main attributes for all the game classes
 
-public class MainStats implements java.io.Serializable {
+class MainStats implements java.io.Serializable {
     private final String tag;
     private int hp, atk, def, crit;
 
-    public MainStats(String tag, int hp, int atk, int def, int crit) {
+    public MainStats(final String tag, int hp, int atk, int def, int crit) {
         this.tag = tag;
         this.hp = hp;
         this.atk = atk;
@@ -54,15 +54,23 @@ public class MainStats implements java.io.Serializable {
         this.crit = crit;
     }
 
-    public void loadTexture(String textureFile) throws FileNotFoundException {
+    public void loadTexture(final String textureFile) {
         File texture = new File(textureFile);
-        Scanner reader = new Scanner(texture);
 
-        if (texture.canRead()) {
-            while (reader.hasNextLine())
-                System.out.println(reader.nextLine());
-            reader.close();
+        try {
+            if (texture.canRead()) {
+                Scanner reader = new Scanner(texture);
+
+                while (reader.hasNextLine())
+                    System.out.println(reader.nextLine());
+
+                reader.close();
+            }
+            else System.out.println("Texture file is not readable");
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot load texture!\n" + "Error: " + e.getMessage());
         }
+
     }
 
     public void printStats() {

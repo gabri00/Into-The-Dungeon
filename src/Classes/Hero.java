@@ -6,12 +6,16 @@ public class Hero extends MainStats {
     private int level = 1;
     private int exp = 1;
 
-    public Hero(String tag, int hp, int atk, int def, int crit) {
+    public Hero(final String tag, int hp, int atk, int def, int crit) {
         super(tag, hp, atk, def, crit);
     }
 
     public Weapon getEquippedWeapon() {
         return equippedWeapon;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public int getExp() {
@@ -33,7 +37,6 @@ public class Hero extends MainStats {
 
         if (getExp() >= maxExp) {
             levelUp();
-
             setExp((getExp() > maxExp) ? (getExp() - maxExp) : 0);
         }
     }
@@ -54,7 +57,7 @@ public class Hero extends MainStats {
     }
 
     public void reinforces() {
-        this.setDef((int) (this.getDef() + this.getDef() * 0.05));  // Increment def by 5%
+        this.setDef(this.getDef() + 3);
     }
 
     public void equipWeapon(final Weapon w) {
