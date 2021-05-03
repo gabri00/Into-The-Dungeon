@@ -3,7 +3,7 @@
  This simple game was developed for the sake of learning the basics of Java.<br/><br/>
  In the following sections you will find some information and some instructions about the game.
 
-##Project classes
+## Project classes
 ```
     .
     ├── Main                # Game loop and basic logic
