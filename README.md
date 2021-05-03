@@ -26,5 +26,6 @@
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-Source codes, expect game assets, are available under the [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/) license.
+Source codes, expect game assets, are available under the [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/) license.<br/>
+All game assets (except for the slime texture are taken from [this website](https://www.asciiart.eu/)).
 
