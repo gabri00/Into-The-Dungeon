@@ -80,7 +80,7 @@ public class Game implements java.io.Serializable {
 
         // dungeon = new Enemy[nFloors][nChambers];
 
-        System.out.printf("Generating dungeon... The dungeon has %d floors and %d rooms per floor%n", nFloors, nChambers);
+        System.out.printf("Generating dungeon... The dungeon has %d floors and %d rooms per floor\n\n", nFloors, nChambers);
 
         // Add an enemy to each chamber based on the enemy danger, (approximately) one third for each danger zone
         for (byte i = 0; i < nFloors; i++) {
@@ -112,17 +112,17 @@ public class Game implements java.io.Serializable {
             case "sword" -> {
                 he = heroTypes.get("warrior");
                 he.equipWeapon(weapons.get("sword"));
-                he.loadTexture("assets/heroes/warriorHero.txt");
+                he.loadTexture("assets/heroes/warrior.txt");
             }
             case "spear" -> {
                 he = heroTypes.get("lancer");
                 he.equipWeapon(weapons.get("spear"));
-                he.loadTexture("assets/heroes/lancerHero.txt");
+                he.loadTexture("assets/heroes/lancer.txt");
             }
             case "bow" -> {
                 he = heroTypes.get("archer");
                 he.equipWeapon(weapons.get("bow"));
-                he.loadTexture("assets/heroes/archerHero.txt");
+                he.loadTexture("assets/heroes/archer.txt");
             }
             default -> throw new IllegalStateException("Unexpected value: " + weaponChoice);
         }
@@ -160,9 +160,10 @@ public class Game implements java.io.Serializable {
 
         if (currChamber > 3)    currChamber = 1;
 
+        System.out.println();
         if (currFloor == 1) System.out.println("Welcome to the first floor, chamber " + currChamber);
         else if (currFloor == nFloors) System.out.println("Welcome to the last floor, chamber " + currChamber);
-        else System.out.printf("\nWelcome to floor %d, chamber %d%n", currFloor, currChamber);
+        else System.out.printf("Welcome to floor %d, chamber %d%n", currFloor, currChamber);
 
         fight(currFloor, currChamber >= 3 ? currChamber - 1 : currChamber);
 
@@ -211,7 +212,7 @@ public class Game implements java.io.Serializable {
     }
 
 
-    private byte quit(boolean won) {
+    private byte quit(final boolean won) {
         if (won) System.out.println("Congratulations!!! Your cleared all the rooms in the dungeon!\nThanks for playing :)");
         return 0;
     }
@@ -220,7 +221,7 @@ public class Game implements java.io.Serializable {
     // Saves the current state of the game at the end of each fight
     public void autoSave(Game game) {
         try {
-            FileOutputStream fos = new FileOutputStream("log.sav");
+            FileOutputStream fos = new FileOutputStream("adventure.save");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(game);
             oos.flush();
@@ -237,7 +238,7 @@ public class Game implements java.io.Serializable {
         Game game = null;
 
         try {
-            FileInputStream fis = new FileInputStream("log.sav");
+            FileInputStream fis = new FileInputStream("adventure.save");
             ObjectInputStream ois = new ObjectInputStream(fis);
             game = (Game) ois.readObject();
             ois.close();

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public class Main {
 
+    // TODO: update instructions
     // Prints some basic instructions
     public static void printInstructions() {
         System.out.println("""
@@ -34,6 +35,19 @@ public class Main {
                 """);
     }
 
+
+    public static void clearConsole() {
+        try {
+            final String os = System.getProperty("os.name");
+            Runtime.getRuntime().exec(os.contains("Windows") ? "cls" : "clear");
+        }
+        catch (Exception e)
+        {
+            System.out.println("Cannot clear the console.");
+        }
+    }
+
+
     // Runs the game and checks for arguments
     public static void main(String[] args) throws IOException {
         Game game = new Game();
@@ -52,14 +66,17 @@ public class Main {
         else {
             System.out.print("""
                 Welcome to the dungeon! Let's begin your adventure...
-                Please increase the console size for a better gaming experience!\n
+                Please increase the console size for a better gaming experience!
+                
                 """);
+
             game.initHero();
             System.out.println();
             game.generateDungeon();
+
+            clearConsole();
         }
 
-        System.out.println("Finally we are going into the dungeon! Good luck and have fun!\n");
         while (game.actions() != 0) {
             System.out.println();
             game.autoSave(game);

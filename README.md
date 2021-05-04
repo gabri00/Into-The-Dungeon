@@ -27,5 +27,12 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 Source codes, expect game assets, are available under the [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/) license.<br/>
-All game assets (except for the slime texture are taken from [this website](https://www.asciiart.eu/)).
+All game assets (except for _slime.txt_, _lancer.txt_, and _warrior.txt_) are taken from [this website](https://www.asciiart.eu/).
 
+## To Do
+- [ ] Add more detailed instructions
+- [ ] Set correct parameters for heroes, enemies, weapons
+- [ ] Add a drop artifacts feature
+- [ ] Fix the level up logic
+- [ ] Implement colored text
+- [ ] Optimize the autosave functionality
